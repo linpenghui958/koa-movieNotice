@@ -1,16 +1,8 @@
-import fs from 'fs'
-import util from 'util'
-import { resolve } from 'path'
+const Koa = require('koa')
+const app = new Koa()
 
-const readFileAsync = util.promisify(fs.readFile)
+app.use(async (ctx, next) => {
+  ctx.body = '电影首页'
+})
 
-async function init () {
-  try {
-    let data = await readFileAsync(resolve(__dirname, '../package.json'))
-    data = JSON.parse(data)
-    console.log(data.name)
-  } catch (err) {
-    console.log(err)
-  }
-}
-init()
+app.listen(2333)
