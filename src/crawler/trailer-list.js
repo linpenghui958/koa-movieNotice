@@ -59,7 +59,8 @@ const sleep = time => new Promise((resolve, reject) => {
 
 
   await brower.close()
-  console.log(result)
   console.log('Visit end')
+  process.send({result})
+  process.exit(0)
 
 })()
