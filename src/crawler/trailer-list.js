@@ -40,9 +40,9 @@ const sleep = time => new Promise((resolve, reject) => {
         const it = $(item)
         const poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
         // const poster = it.find('img').attr('src')
-        const id = it.data('id')
+        const id = it.find('.cover-wp').data('id')
         const name = it.find('img').attr('alt')
-        const average = Number(it.find('p').find('strong').text())
+        const average = Number(it.find('.rate').text())
   
         links.push({
           poster,
