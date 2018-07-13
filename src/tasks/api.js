@@ -8,16 +8,30 @@ async function fetchMovieData (item) {
 
 ;(async () => {
   const obj = [
-    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2524762163.jpg',
-      id: 30232339,
-      name: '你的孩子不是你的孩子',
-      average: 8.1 
-    },
-    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2526126803.jpg',
-      id: 27059183,
-      name: '阳光先生',
-      average: 7.7 
-    },
+    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2526297221.jpg',
+      id: 26366496,
+      name: '邪不压正',
+      average: 7.7 },
+    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2526126781.jpg',
+      id: 30232261,
+      name: '高岭之花',
+      average: 6.7 },
+    { poster: 'https://img1.doubanio.com/view/photo/l_ratio_poster/public/p2512658449.jpg',
+      id: 27015848,
+      name: '魔道祖师',
+      average: 8.7 },
+    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2527060460.jpg',
+      id: 30264953,
+      name: '圆桌讲究派',
+      average: 8.7 },
+    { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2524596871.jpg',
+      id: 30224720,
+      name: '绝对零度2018',
+      average: 6.4 },
+    { poster: 'https://img1.doubanio.com/view/photo/l_ratio_poster/public/p2524119829.jpg',
+      id: 26252279,
+      name: '利器',
+    }
   ]
   let movieData = []
   await obj.forEach(async item => {
