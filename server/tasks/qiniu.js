@@ -1,13 +1,16 @@
-const movieData = [
-  { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2526297221.jpg',
-    id: 26366496,
-    name: '邪不压正',
-    video: 'http://vt1.doubanio.com/201807131543/797235af0449e2e79427591d1304180d/view/movie/M/402330091.mp4',
-    link: 'https://movie.douban.com/trailer/233091/#content',
-    cover: 'https://img3.doubanio.com/img/trailer/medium/2526489612.jpg?1530244322',
-    average: 7.7 
-  }
-]
+// const movieData = [
+//   { poster: 'https://img3.doubanio.com/view/photo/l_ratio_poster/public/p2526297221.jpg',
+//     id: 26366496,
+//     name: '邪不压正',
+//     video: 'http://vt1.doubanio.com/201807131543/797235af0449e2e79427591d1304180d/view/movie/M/402330091.mp4',
+//     link: 'https://movie.douban.com/trailer/233091/#content',
+//     cover: 'https://img3.doubanio.com/img/trailer/medium/2526489612.jpg?1530244322',
+//     average: 7.7 
+//   }
+// ]
+
+const mongoose = require('mongoose')
+const Movie = mongoose.model('Movie')
 
 const qiniuConfig = require('../config')
 
@@ -52,14 +55,25 @@ const fetchAndUploadToQiniu = async (url, key) => {
 
 // 测试上传
 ;(async () => {
-  movieData.map(async item => {
+  // 拿到需要补充数据的movieList
+  const movieData = await Movie.find({
+    $or: [
+      { videoKey: { $exists: false } }
+    ]
+  })
+  
+  console.log('需要爬取的movieList长度为' + movieData.length)
+
+  for (let i = 0; i < 1; i++) {
+    let item = movieData[i]
+    console.log(item.video)
+    console.log(item.key)
+    // 如果没有vide数据，则fetch并且upload
     if (item.video && !item.key) {
       try {
-        console.log('start upload videData')
+        console.log('start upload doubanId' + item.doubanId + 'resource')
         let videoData = await fetchAndUploadToQiniu(item.video, nanoid() + '.mp4')
-        console.log('start upload coverData')
         let coverData = await fetchAndUploadToQiniu(item.cover, nanoid() + '.png')
-        console.log('start upload posterData')
         let posterData = await fetchAndUploadToQiniu(item.poster, nanoid() + '.png')
       
         if (videoData.key)
@@ -74,7 +88,9 @@ const fetchAndUploadToQiniu = async (url, key) => {
       }
       
     }
-  })
+  }
+
+
 })()
 
 

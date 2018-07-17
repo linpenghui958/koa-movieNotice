@@ -31,12 +31,13 @@ const sleep = time => new Promise((resolve, reject) => {
 
   const result = await page.evaluate(() => {
 
-    const $ = window.$
-    const $content = $('.list-wp a')
+    const $ = window.$  // 获取全局jquery
+    const $content = $('.list-wp a') // 拿到包含数据的content
     console.log($content)
     let links = []
     
     if ($content.length > 1) {
+      // 拿到每一个movie dom的数据
       $content.each((index, item) => {
         const it = $(item)
         const poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
@@ -61,6 +62,7 @@ const sleep = time => new Promise((resolve, reject) => {
 
   await brower.close()
   console.log('Visit end')
+  // 将数据传回
   process.send({result})
   process.exit(0)
 

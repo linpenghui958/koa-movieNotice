@@ -33,7 +33,7 @@ async function fetchMovieData (item) {
 
   console.log(movies.length)
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 70; i++) {
   // for (let i = 0; i < 1; i++) {
     await sleep(1000)
     let movie = movies[i]
@@ -109,5 +109,6 @@ async function fetchMovieData (item) {
     }
   }
 
+  console.log('爬取api结束')
 
 })()

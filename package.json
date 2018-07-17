@@ -4,7 +4,7 @@
   "description": "> 基于koa2的电影预告网站",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,7 @@
     "bcrypt": "^3.0.0",
     "glob": "^7.1.2",
     "koa": "^2.5.1",
+    "koa-router": "^7.4.0",
     "koa-views": "^6.1.4",
     "mongoose": "^5.2.3",
     "nanoid": "^1.0.7",
