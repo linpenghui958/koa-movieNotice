@@ -40,11 +40,11 @@ const userSchema = new Schema({
   }
 })
 
-userSchema.virtual('isLocked').get(() => {
+userSchema.virtual('isLocked').get(function () {
   return !!(this.lockUntil && this.lockUntil > Date.now())
 })
 
-userSchema.pre('save', next => {
+userSchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createAt = this.meta.updateAt = Date.now()
   } else {
@@ -53,7 +53,7 @@ userSchema.pre('save', next => {
   next()
 })
 
-userSchema.pre('save', next => {
+userSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next()
 
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
@@ -114,4 +114,4 @@ userSchema.methods = {
   }
 }
 
-mongoose.model('Movie', userSchema)
+mongoose.model('User', userSchema)

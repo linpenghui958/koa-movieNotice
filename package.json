@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/linpenghui958/koa-movieNotice#readme",
   "dependencies": {
+    "bcrypt": "^3.0.0",
+    "glob": "^7.1.2",
     "koa": "^2.5.1",
     "koa-views": "^6.1.4",
     "mongoose": "^5.2.3",

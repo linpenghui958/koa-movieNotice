@@ -8,10 +8,11 @@ const { connect, initSchemas } = require('./database/init')
 ;(async () => {
   await connect()
   
-  initSchemas()
-  const Movie = mongoose.model('Movie')
-  const movie = await Movie.find({})
-  console.log(movie)
+  await initSchemas()
+
+  // require('./tasks/movie')
+  // require('./tasks/api')
+  require('./tasks/qiniu')
 })()
 
 app.use(views(resolve(__dirname, './views'), {

@@ -22,9 +22,10 @@ const sleep = time => new Promise((resolve, reject) => {
 
   await page.waitForSelector('.more')
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 70; i++) {
     await sleep(3000)
     await page.click('.more')
+    console.log('click more')
   }
   
 
@@ -40,14 +41,14 @@ const sleep = time => new Promise((resolve, reject) => {
         const it = $(item)
         const poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
         // const poster = it.find('img').attr('src')
-        const id = it.find('.cover-wp').data('id')
-        const name = it.find('img').attr('alt')
+        const doubanId = it.find('.cover-wp').data('id')
+        const title = it.find('img').attr('alt')
         const average = Number(it.find('.rate').text())
   
         links.push({
           poster,
-          id,
-          name,
+          doubanId,
+          title,
           average
         })
       })
