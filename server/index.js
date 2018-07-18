@@ -13,7 +13,7 @@ const { connect, initSchemas } = require('./database/init')
  
   // require('./tasks/movie')
   // require('./tasks/api')
-  require('./tasks/qiniu')  //爬取数据到qiniu
+  // require('./tasks/qiniu')  //爬取数据到qiniu
   // require('./crawler/video')  // 爬取video字段数据
 })()
 
