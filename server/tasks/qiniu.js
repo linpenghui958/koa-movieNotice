@@ -9,6 +9,11 @@
 //   }
 // ]
 
+
+const sleep = time => new Promise(resolve => {
+  setTimeout(resolve, time)
+})
+
 const mongoose = require('mongoose')
 const Movie = mongoose.model('Movie')
 
@@ -58,22 +63,25 @@ const fetchAndUploadToQiniu = async (url, key) => {
   // 拿到需要补充数据的movieList
   const movieData = await Movie.find({
     $or: [
-      { videoKey: { $exists: false } }
+      { 
+        videoKey: { $exists: false },
+        video: { $exists: true }
+      }
     ]
   })
   
   console.log('需要爬取的movieList长度为' + movieData.length)
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < movieData.length; i++) {
     let item = movieData[i]
-    console.log(item.video)
-    console.log(item.key)
-    // 如果没有vide数据，则fetch并且upload
+    console.log(`fetch upload NO. ${i} movie resource`)
+    await sleep(3000)
+    // 如果没有key数据，则fetch并且upload
     if (item.video && !item.key) {
       try {
         console.log('start upload doubanId' + item.doubanId + 'resource')
         let videoData = await fetchAndUploadToQiniu(item.video, nanoid() + '.mp4')
-        let coverData = await fetchAndUploadToQiniu(item.cover, nanoid() + '.png')
+        let coverData = await fetchAndUploadToQiniu(item.image, nanoid() + '.png')
         let posterData = await fetchAndUploadToQiniu(item.poster, nanoid() + '.png')
       
         if (videoData.key)
@@ -82,13 +90,15 @@ const fetchAndUploadToQiniu = async (url, key) => {
         posterData.key && (item.posterKey = posterData.key)
 
         console.log(item)
-        
+        await item.save()
       } catch (e) {
         console.log(e)
       }
       
     }
   }
+
+  console.log('fetch upload end')
 
 
 })()

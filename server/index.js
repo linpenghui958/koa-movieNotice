@@ -10,10 +10,11 @@ const { connect, initSchemas } = require('./database/init')
   await connect()
   
   await initSchemas()
-
+ 
   // require('./tasks/movie')
   // require('./tasks/api')
-  require('./tasks/qiniu')
+  require('./tasks/qiniu')  //爬取数据到qiniu
+  // require('./crawler/video')  // 爬取video字段数据
 })()
 
 app.use(router.routes())
