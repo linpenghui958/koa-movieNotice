@@ -23,11 +23,13 @@
     "koa": "^2.5.1",
     "koa-router": "^7.4.0",
     "koa-views": "^6.1.4",
+    "lodash": "^4.17.10",
     "mongoose": "^5.2.3",
     "nanoid": "^1.0.7",
     "pug": "^2.0.3",
     "puppeteer": "^1.6.0",
     "qiniu": "^7.2.1",
+    "ramda": "^0.25.0",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },

@@ -1,3 +1,4 @@
+@father
 class Boy {
   @speak('chinese')
   run () {
@@ -6,8 +7,16 @@ class Boy {
   }
 }
 
+function father(target, key, descriptor) {
+  console.log('----Class----')
+  console.log(target)
+  console.log(key)
+  console.log(descriptor)
+}
+
 function speak (language) {
   return function (target, key, descriptor) {
+    console.log('----Method----')
     console.log(target)
     console.log(key)
     console.log(descriptor)
