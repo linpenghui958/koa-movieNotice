@@ -17,3 +17,8 @@ class AppContainer extends React.Component {
     return <App name={this.state.name } />
   }
 }
+
+render(
+  <AppContainer />,
+  document.getElementById('app')
+)

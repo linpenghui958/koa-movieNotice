@@ -15,11 +15,11 @@ export class movieController {
   @get('/')
   async getMovies (ctx, next) {
     const { type, year } = ctx.query
-    // const movies = await getAllMovies(type, year)
+    const movies = await getAllMovies(type, year)
 
     ctx.body = {
       code: 200,
-      data: []
+      movies
     }
   }
 
