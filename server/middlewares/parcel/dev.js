@@ -11,7 +11,7 @@ const bunlder = new Bundler(r('../../../src/index.html'), {
 })
 
 export const dev = async app => {
-  await bunlder.bundler()
+  await bunlder.bundle()
 
   app.use(serve(r('../../../dist')))
 

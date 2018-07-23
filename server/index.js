@@ -1,5 +1,5 @@
 const Koa = require('koa')
-const MIDDLEWARES = ['router']
+const MIDDLEWARES = ['parcel', 'router']
 const R = require('ramda')
 const { resolve } = require('path')
 const { connect, initSchemas } = require('./database/init')
