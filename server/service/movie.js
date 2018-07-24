@@ -3,7 +3,9 @@ const Movie = mongoose.model('Movie')
 
 export const getAllMovies = async (type, year) => {
   let query = {}
-
+  query.posterKey = {
+    $exists: true
+  }
   if (type) {
     query.movieTypes = {
       $in: [type]
@@ -14,7 +16,7 @@ export const getAllMovies = async (type, year) => {
     query.year = year
   }
 
-  const movies = await Movie.find(query)
+  const movies = await Movie.find(query).limit(20)
 
   return movies
 }
