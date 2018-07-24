@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
-const { Mixed } = Schema.Types
+const Schema = mongoose.Schema
+const Mixed = Schema.Types.Mixed
 const SALT_WORK_FACTOR = 10
 const MAX_LOGIN_ATTEMPTS = 5
 const LOCK_TIME = 2 * 60 * 60 * 1000
@@ -10,30 +10,33 @@ const userSchema = new Schema({
   username: {
     unique: true,
     required: true,
-    type: String
+    type: String,
   },
   email: {
     unique: true,
     required: true,
-    type: String
+    type: String,
   },
-  passwrod: {
+  password: {
     unique: true,
-    type: String
+    type: String,
   },
   loginAttempts: {
     type: Number,
     required: true,
     default: 0
   },
+  role: {
+    type: String,
+    default: 'user'
+  },
   lockUntil: Number,
-
   meta: {
-    createAt: {
+    createdAt: {
       type: Date,
       default: Date.now()
     },
-    updateAt: {
+    updatedAt: {
       type: Date,
       default: Date.now()
     }
@@ -46,10 +49,11 @@ userSchema.virtual('isLocked').get(function () {
 
 userSchema.pre('save', function (next) {
   if (this.isNew) {
-    this.meta.createAt = this.meta.updateAt = Date.now()
+    this.meta.createdAt = this.meta.updatedAt = Date.now()
   } else {
-    this.meta.updateAt = Date.now()
+    this.meta.updatedAt = Date.now()
   }
+
   next()
 })
 
@@ -57,11 +61,12 @@ userSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next()
 
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
-    if (err) return err
-    bcrypt.hash(this.passwrod, salt, (error, hash) => {
+    if (err) return next(err)
+
+    bcrypt.hash(this.password, salt, (error, hash) => {
       if (error) return next(error)
 
-      this.passwrod = hash
+      this.password = hash
       next()
     })
   })
@@ -77,7 +82,7 @@ userSchema.methods = {
     })
   },
 
-  incLoginAttrpts: (uesr) => {
+  incLoginAttepts: (user) => {
     return new Promise((resolve, reject) => {
       if (this.lockUntil && this.lockUntil < Date.now()) {
         this.update({
@@ -98,7 +103,7 @@ userSchema.methods = {
           }
         }
 
-        if (this.loginAttempts +1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
+        if (this.loginAttempts + 1 >= MAX_LOGIN_ATTEMPTS && !this.isLocked) {
           updates.$set = {
             lockUntil: Date.now() + LOCK_TIME
           }
@@ -109,7 +114,6 @@ userSchema.methods = {
           else reject(err)
         })
       }
-      
     })
   }
 }
