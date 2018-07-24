@@ -64,7 +64,7 @@ export default class LayoutDefault extends Component {
           >
             <a href={'/'} className='hover-scale logo-text' style={{
               color: '#fff2e8'
-            }}>黑骑预告片网站</a>
+            }}>山竹瓜预告片</a>
           </Menu.Item>
           {
             navRoutes.map((e, i) => (

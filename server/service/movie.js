@@ -16,7 +16,7 @@ export const getAllMovies = async (type, year) => {
     query.year = year
   }
 
-  const movies = await Movie.find(query).limit(20)
+  const movies = await Movie.find(query).limit(100)
 
   return movies
 }
@@ -31,8 +31,11 @@ export const getRelativeMovies = async (movie) => {
   const movies = await Movie.find({
     movieTypes: {
       $in: movie.movieTypes
+    },
+    posterKey: {
+      $exists: true
     }
-  })
+  }).limit(50)
 
   return movies
 }

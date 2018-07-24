@@ -96,7 +96,7 @@ export default class Content extends Component {
                   actions={[
                     <Badge>
                       <Icon style={{marginRight: '2px'}} type='clock-circle' />
-                      {moment(it.meta.createdAt).fromNow(true)} 前更新
+                      {moment(it.meta.createAt).fromNow(true)} 前更新
                     </Badge>,
                     <Badge>
                       <Icon style={{marginRight: '2px'}} type='star' />
