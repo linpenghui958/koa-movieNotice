@@ -11,7 +11,7 @@ import 'moment/locale/zh-cn'
 
 moment.locale('zh-cn')
 
-const site = 'http://video.iblack7.com/'
+const site = 'http://pbsrrj6nm.bkt.clouddn.com/'
 
 export default class AdminList extends Component {
   constructor (props) {
@@ -33,11 +33,11 @@ export default class AdminList extends Component {
         title: '上映时间',
         dataIndex: 'pubdate',
         key: 'pubdate',
-        render: (text, record) => (
-          record.pubdate.map((it, i) => (
-            <p key={i}>{moment(it.date).format('YYYY-MM-DD')} {it.country}</p>
-          ))
-        )
+        // render: (text, record) => (
+        //   record.pubdate.map((it, i) => (
+        //     <p key={i}>{moment(it.date).format('YYYY-MM-DD')} {it.country}</p>
+        //   ))
+        // )
       },
       {
         title: '评分',
@@ -112,6 +112,7 @@ export default class AdminList extends Component {
       method: 'get',
       url: `/admin/movie/list`
     }).then(res => {
+      console.log(res.length)
       this.setState({
         dataSource: res
       })
@@ -141,7 +142,7 @@ export default class AdminList extends Component {
     let { dataSource, columns } = this.state
 
     if (!dataSource || !dataSource.length) return null
-
+    console.log(dataSource)
     dataSource = dataSource.map((data, i) => {
       data.key = i
 

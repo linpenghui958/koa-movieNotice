@@ -9,7 +9,7 @@ const _request = (params = {}, fn = () => {}) => {
   return axios({ ...defaultAxiosConf, ...params})
           .then( res => {
             const { success, data, err, code } = res.data
-
+            console.log(res)
             if (code === 401) {
               window.location.href = '/'
               return

@@ -17,4 +17,10 @@ export default [
     path: '/admin',
     component: AC(() => import('./views/admin/login'))
   },
+  {
+    name: '后台电影列表',
+    icon: 'admin',
+    path: '/admin/list',
+    component: AC(() => import('./views/admin/list'))
+  },
 ]
