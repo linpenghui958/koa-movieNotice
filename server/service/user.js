@@ -24,3 +24,11 @@ export const adminMovieList = async () => {
   })
   return movieData
 }
+
+export const findAndRemove = async (id) => {
+  const movie = await Movie.findOne({_id: id})
+
+  if (movie) {
+    await movie.remove()
+  }
+}

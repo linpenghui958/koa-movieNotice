@@ -5,11 +5,13 @@ const {
   put,
   auth,
   required,
-  admin
+  admin,
+  del
 } = require('../lib/decorator')
 const {
   checkPassword,
-  adminMovieList
+  adminMovieList,
+  findAndRemove
 } = require('../service/user')
 
 @controller('/admin')
@@ -58,6 +60,22 @@ export class userController {
       success: true,
       data: movieData
     })
+  }
+
+  @del('/movies')
+  @required({
+    query: ['id']
+  })
+  async remove (ctx, next) {
+    const id = ctx.query.id
+    console.log(id)
+    const movie = await findAndRemove(id)
+    const movies = await adminMovieList()
+
+    ctx.body = {
+      data: movies,
+      success: true
+    }
   }
 
 }
