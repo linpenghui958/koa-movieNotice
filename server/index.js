@@ -22,7 +22,8 @@ const useMiddlewares = (app) => {
   await initSchemas()
 
   await initAdmin()
- 
+  
+  require('./crawler/fetchAndUpload')
   // require('./tasks/movie')
   // require('./tasks/api')
   // require('./tasks/qiniu')  //爬取数据到qiniu
