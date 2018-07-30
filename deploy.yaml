@@ -1,0 +1,22 @@
+apps:
+  - script : ./server/index.js
+  name: 'Koa2'
+  evn: 
+    COMMON_VARIABLE: true
+  env_production:
+    NODE_ENV: production
+deploy:
+  production:
+    user: root
+    host:
+      -
+    port:
+    ref: origin/master
+    reop: 
+      git@github.com:linpenghui958/koa-movieNotice.git
+    path:
+      /www/koa2/production
+    ssh_options: StrictHostKeyChecking=no
+    pre-deploy: 'npm install && npm run build && pm2 startOrRestart deploy.yaml --env production'
+    env:
+      NODE_ENV: production
