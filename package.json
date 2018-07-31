@@ -4,15 +4,9 @@
   "description": "> 基于koa2的电影预告网站",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
     "start": "set NODE_ENV=development && rm -rf dist && rm -rf .cache && nodemon ./start.js",
     "build": "rm -rf parcel/dist && parcel build src/index.html --no-cache -d dist --public-url /",
     "server": "cnpm install && npm run build && pm2 startOrRestart deploy.yaml --env production",
-=======
-    "start": "set NODE_ENV=development && rm -rf dist && rm -rf .cache && pm2 start ./start.js",
-    "build": "rm -rf dist && parcel build src/index.html --no-cache -d dist --public-url /",
-    "server": "cnpm install && npm run start && pm2 startOrRestart deploy.yaml --env production",
->>>>>>> 06d65e7f8af8166436fe3c3ac660dd95586f6b66
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
