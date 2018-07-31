@@ -31,7 +31,7 @@ const options = {
 const bucket = qiniuConfig.qiniu.bucket
 
 // 配置上传config, zone为上传空间（Zone_z0对应华东）
-config = new qiniu.conf.Config()
+let config = new qiniu.conf.Config()
 config.zone = qiniu.zone.Zone_z0
 
 const bucketManager = new qiniu.rs.BucketManager(mac, config)
