@@ -15,9 +15,10 @@ deploy:
     repo:
       git@github.com:linpenghui958/koa-movieNotice.git
     path:
-      /www/koa2/production
+      /www/movie/production
     ssh_options: StrictHostKeyChecking=no
     pre-deploy: git fetch --all
     post-deploy: 'npm install && npm run build && pm2 startOrRestart deploy.yaml --env production'
     env:
       NODE_ENV: production
+
