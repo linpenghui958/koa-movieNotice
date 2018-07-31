@@ -1,5 +1,5 @@
 const Koa = require('koa')
-const MIDDLEWARES = ['common', 'router']
+const MIDDLEWARES = ['common', 'router', 'parcel']
 const R = require('ramda')
 const { resolve } = require('path')
 const { connect, initSchemas, initAdmin } = require('./database/init')
@@ -23,7 +23,7 @@ const useMiddlewares = (app) => {
 
   await initAdmin()
   
-  require('./crawler/fetchAndUpload')
+  // require('./crawler/fetchAndUpload')
   // require('./tasks/movie')
   // require('./tasks/api')
   // require('./tasks/qiniu')  //爬取数据到qiniu
