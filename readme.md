@@ -21,18 +21,18 @@
 
 
 
-	// 使用puppeteer进行数据爬取
-	const puppeteer = require('puppeteer')
-	// 豆瓣电影列表页
-	const url = `https://movie.douban.com/tag/#/?sort=R&range=6,10&tags=`
+	 // 使用puppeteer进行数据爬取
+	 const puppeteer = require('puppeteer')
+	 // 豆瓣电影列表页
+	 const url = `https://movie.douban.com/tag/#/?sort=R&range=6,10&tags=`
 	
-	const sleep = time => new Promise(resolve => {
-	  setTimeout(resolve, time)
-	})
+	 const sleep = time => new Promise(resolve => {
+	   setTimeout(resolve, time)
+	 })
 	
-	;(async () => {
-	  console.log('Start visit the target page')
-	  // 初始化puppeteer
+	 ;(async () => {
+	   console.log('Start visit the target page')
+	   // 初始化puppeteer
 	  const browser = await puppeteer.launch({
 	    args: ['--no-sandbox'],
 	    dumpio: false
@@ -86,23 +86,23 @@
 
 
 
-	const baseUrl = 'https://movie.douban.com/subject/'
+	 const baseUrl = 'https://movie.douban.com/subject/'
 
-	const puppeteer = require('puppeteer')
-	const mongoose = require('mongoose')
-	const Movie = mongoose.model('Movie')
+	 const puppeteer = require('puppeteer')
+	 const mongoose = require('mongoose')
+	 const Movie = mongoose.model('Movie')
 	
-	const sleep = time => new Promise(resolve => {
-	  setTimeout(resolve, time)
-	})
+	 const sleep = time => new Promise(resolve => {
+	   setTimeout(resolve, time)
+	 })
 	
-	;(async () => {
-	  console.log('从数据库获取需要爬取的datalist')
-	  let movieData = await Movie.find({
+	 ;(async () => {
+	   console.log('从数据库获取需要爬取的datalist')
+	   let movieData = await Movie.find({
 	    $or: [
-	      { video: { $exists: false} }
-	    ]
-	  })
+	       { video: { $exists: false} }
+	     ]
+	   })
 	
 	  console.log(`需要爬取video的数据长度为${movieData.length}`)
 	
@@ -180,37 +180,37 @@
 
 
 	
-	const requet = require('request-promise-native')
-	const mongoose = require('mongoose')
-	const Movie = mongoose.model('Movie')
-	const Category = mongoose.model('Category')
-	const baseUrl = 'http://api.douban.com/v2/movie/'
-	
-	const sleep = time => new Promise((resolve, reject) => {
-	  setTimeout(resolve, time)
-	})
-	
-	async function fetchMovieData (item) {
-	  const res = await requet(baseUrl + item.doubanId)
-	  let body
-	
-	  try {
-	    body = JSON.parse(res)
-	  } catch (e) {
-	    console.log(e)
-	  }
-	  return body
-	}
-	
-	;(async () => {
-	  let movies = await Movie.find({
-	    $or: [
-	      { summary: { $exists: false } },
-	      { summary: null },
-	      { year: { $exists: false } },
-	      { title: '' },
-	      { summary: '' }
-	    ]
+		const requet = require('request-promise-native')
+		const mongoose = require('mongoose')
+		const Movie = mongoose.model('Movie')
+		const Category = mongoose.model('Category')
+		const baseUrl = 'http://api.douban.com/v2/movie/'
+		
+		const sleep = time => new Promise((resolve, reject) => {
+		  setTimeout(resolve, time)
+		})
+		
+		async function fetchMovieData (item) {
+		  const res = await requet(baseUrl + item.doubanId)
+		  let body
+		
+		  try {
+		    body = JSON.parse(res)
+		  } catch (e) {
+		    console.log(e)
+		  }
+		  return body
+		}
+		
+		;(async () => {
+		  let movies = await Movie.find({
+		    $or: [
+		      { summary: { $exists: false } },
+		      { summary: null },
+		      { year: { $exists: false } },
+		      { title: '' },
+		      { summary: '' }
+		    ]
 	  })
 	
 	  console.log(movies.length)
@@ -390,7 +390,9 @@
 	  console.log('fetch upload end')
 	
 	
-	})()
+	  })()
+
+
 ``` bash
 # install dependencies
 $ npm install # Or yarn install*[see note below]
