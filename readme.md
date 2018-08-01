@@ -5,6 +5,8 @@
 
 ## Build Setup
 
+##### [Online Preview](http://movie.linph.cc)
+
 ##### 预览效果
 
 ![](https://i.imgur.com/9QcR5NF.jpg)
@@ -16,6 +18,7 @@
 ##### crawler部分
 
 - 从豆瓣列表页获取基本数据
+
 
 
 	// 使用puppeteer进行数据爬取
@@ -80,6 +83,7 @@
 	})()
 
 - 爬取对应电影预告片的地址
+
 
 
 	const baseUrl = 'https://movie.douban.com/subject/'
@@ -173,6 +177,7 @@
 	})()
 
 - 完善电影数据
+
 
 	
 	const requet = require('request-promise-native')
@@ -288,71 +293,71 @@
 	
 	  console.log('爬取api结束')
 	
-	})()
+	 })()
 
 
 - 将网络数据上传到七牛云
 
 	
-	const sleep = time => new Promise(resolve => {
-	  setTimeout(resolve, time)
-	})
-	
-	const mongoose = require('mongoose')
-	const Movie = mongoose.model('Movie')
-	
-	const qiniuConfig = require('../config')
-	
-	const qiniu = require('qiniu')
-	// 获取随机数
-	const nanoid = require('nanoid')
-	
-	const mac = new qiniu.auth.digest.Mac(qiniuConfig.qiniu.accessKey, qiniuConfig.qiniu.secretKey)
-	
-	const options = {
-	  scope: qiniuConfig.qiniu.bucket
-	}
-	const bucket = qiniuConfig.qiniu.bucket
-	
-	// 配置上传config, zone为上传空间（Zone_z0对应华东）
-	let config = new qiniu.conf.Config()
-	config.zone = qiniu.zone.Zone_z0
-	
-	const bucketManager = new qiniu.rs.BucketManager(mac, config)
-	
-	/**
-	 * 抓取资源并上传到七牛云
-	 * @param {抓取资源的地址}} url 
-	 * @param {保存在服务器的名称} key 
-	 */
-	const fetchAndUploadToQiniu = async (url, key) => {
-	  return new Promise((resolve, reject) => {
-	    // 抓紧网络资源到空间
-	    bucketManager.fetch(url, bucket, key, (err, respBody, respInfo) => {
-	      if (err) {
-	        reject(err)
-	      } else {
-	        if (respInfo.statusCode == 200) {
-	          resolve({key})
-	        } else {
-	          reject(respInfo)
-	        }
-	      }
-	    })
-	  })
-	}
-	
-	// 测试上传
-	;(async () => {
-	  // 拿到需要补充数据的movieList
-	  const movieData = await Movie.find({
-	    $or: [
-	      { 
-	        videoKey: { $exists: false },
-	        video: { $exists: true }
-	      }
-	    ]
-	  })
+		const sleep = time => new Promise(resolve => {
+		  setTimeout(resolve, time)
+		})
+		
+		const mongoose = require('mongoose')
+		const Movie = mongoose.model('Movie')
+		
+		const qiniuConfig = require('../config')
+		
+		const qiniu = require('qiniu')
+		// 获取随机数
+		const nanoid = require('nanoid')
+		
+		const mac = new qiniu.auth.digest.Mac(qiniuConfig.qiniu.accessKey, qiniuConfig.qiniu.secretKey)
+		
+		const options = {
+		  scope: qiniuConfig.qiniu.bucket
+		}
+		const bucket = qiniuConfig.qiniu.bucket
+		
+		// 配置上传config, zone为上传空间（Zone_z0对应华东）
+		let config = new qiniu.conf.Config()
+		config.zone = qiniu.zone.Zone_z0
+		
+		const bucketManager = new qiniu.rs.BucketManager(mac, config)
+		
+		/**
+		 * 抓取资源并上传到七牛云
+		 * @param {抓取资源的地址}} url 
+		 * @param {保存在服务器的名称} key 
+		 */
+		const fetchAndUploadToQiniu = async (url, key) => {
+		  return new Promise((resolve, reject) => {
+		    // 抓紧网络资源到空间
+		    bucketManager.fetch(url, bucket, key, (err, respBody, respInfo) => {
+		      if (err) {
+		        reject(err)
+		      } else {
+		        if (respInfo.statusCode == 200) {
+		          resolve({key})
+		        } else {
+		          reject(respInfo)
+		        }
+		      }
+		    })
+		  })
+		}
+		
+		// 测试上传
+		;(async () => {
+		  // 拿到需要补充数据的movieList
+		  const movieData = await Movie.find({
+		    $or: [
+		      { 
+		        videoKey: { $exists: false },
+		        video: { $exists: true }
+		      }
+		    ]
+		  })
 	  
 	  console.log('需要爬取的movieList长度为' + movieData.length)
 	
