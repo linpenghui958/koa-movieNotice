@@ -24,7 +24,7 @@ const mac = new qiniu.auth.digest.Mac(qiniuConfig.qiniu.accessKey, qiniuConfig.q
 
 const bucket = qiniuConfig.qiniu.bucket
 
-config = new qiniu.conf.Config()
+let config = new qiniu.conf.Config()
 config.zone = qiniu.zone.Zone_z0
 
 const bucketManager = new qiniu.rs.BucketManager(mac, config)
