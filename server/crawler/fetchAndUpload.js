@@ -80,61 +80,61 @@ async function fetchMovieData (item) {
   })
 
   const page = await browser.newPage()
-  await page.goto(movieListUrl, {
-    waitUntil: 'networkidle2'
-  })
+  // await page.goto(movieListUrl, {
+  //   waitUntil: 'networkidle2'
+  // })
 
-  await page.waitForSelector('.more')
+  // await page.waitForSelector('.more')
 
-  for(let i = 0; i < 4; i++) {
-    await sleep(3000)
-    await page.click('.more')
-  }
+  // for(let i = 0; i < 2; i++) {
+  //   await sleep(3000)
+  //   await page.click('.more')
+  // }
 
-  // 爬取页面数据
-  const result = await page.evaluate(() => {
-    var $ = window.$
-    var items = $('.list-wp a')
-    var links = []
+  // // 爬取页面数据
+  // const result = await page.evaluate(() => {
+  //   var $ = window.$
+  //   var items = $('.list-wp a')
+  //   var links = []
 
-    if (items.length >= 1) {
-      items.each((index, item) => {
-        let it = $(item)
-        let doubanId = it.find('div').data('id')
-        let title = it.find('.title').text()
-        let rate = it.find('.rate').text()
-        let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
+  //   if (items.length >= 1) {
+  //     items.each((index, item) => {
+  //       let it = $(item)
+  //       let doubanId = it.find('div').data('id')
+  //       let title = it.find('.title').text()
+  //       let rate = it.find('.rate').text()
+  //       let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
 
-        links.push({
-          doubanId,
-          rate,
-          title,
-          poster
-        })
-      })
-    }
-    return links
-  })
+  //       links.push({
+  //         doubanId,
+  //         rate,
+  //         title,
+  //         poster
+  //       })
+  //     })
+  //   }
+  //   return links
+  // })
 
-  console.log(`爬取到的movieList长度为${result.length}`)
+  // console.log(`爬取到的movieList长度为${result.length}`)
 
-  // 数据库不存在，则新建并保存
-  await result.forEach(async item => {
-    let movie = await Movie.findOne({
-      doubanId: item.doubanId
-    })
-    if (!movie) {
-      let movieItem = new Movie(item)
-      await movieItem.save()
-    }
-  })
+  // // 数据库不存在，则新建并保存
+  // await result.forEach(async item => {
+  //   let movie = await Movie.findOne({
+  //     doubanId: item.doubanId
+  //   })
+  //   if (!movie) {
+  //     let movieItem = new Movie(item)
+  //     await movieItem.save()
+  //   }
+  // })
 
   //从数据库中获取movieList
   let movieDataList = await Movie.find({
     $or: [
       { video: { $exists: false} }
     ]
-  })
+  }).sort({meta: -1}).limit(50)
 
   console.log(`需要爬取video的数据长度为${movieDataList.length}`)
 
