@@ -134,7 +134,7 @@ async function fetchMovieData (item) {
     $or: [
       { video: { $exists: false} }
     ]
-  }).sort({meta: -1}).limit(50)
+  }).sort({meta: -1}).limit(100)
 
   console.log(`需要爬取video的数据长度为${movieDataList.length}`)
 
@@ -203,91 +203,91 @@ async function fetchMovieData (item) {
     //从豆瓣api完善电影数据
     
     // 获取需要完善的电影列表
-    let movies = await Movie.find({
-      $or: [
-        { summary: { $exists: false } },
-        { summary: null },
-        { year: { $exists: false } },
-        { title: '' },
-        { summary: '' }
-      ]
-    })
+    // let movies = await Movie.find({
+    //   $or: [
+    //     { summary: { $exists: false } },
+    //     { summary: null },
+    //     { year: { $exists: false } },
+    //     { title: '' },
+    //     { summary: '' }
+    //   ]
+    // })
 
-    for (let i = 0; i < 70; i++) {
-      // for (let i = 0; i < 1; i++) {
-        await sleep(5000)
-        let movie = movies[i]
-        let movieData = await fetchMovieData(movie)
+    // for (let i = 0; i < 70; i++) {
+    //   // for (let i = 0; i < 1; i++) {
+    //     await sleep(5000)
+    //     let movie = movies[i]
+    //     let movieData = await fetchMovieData(movie)
     
-        if (movieData) {
-          let tags = movieData.tags || []
+    //     if (movieData) {
+    //       let tags = movieData.tags || []
     
-          movie.tags = movie.tags || []
-          movie.summary = movieData.summary || ''
-          movie.title = movieData.alt_title || movieData.title || ''
-          movie.rawTitle = movieData.title || ''
+    //       movie.tags = movie.tags || []
+    //       movie.summary = movieData.summary || ''
+    //       movie.title = movieData.alt_title || movieData.title || ''
+    //       movie.rawTitle = movieData.title || ''
     
-          if (movieData.attrs) {
-            movie.movieTypes = movieData.attrs.movie_type || []
-            movie.year = movieData.attrs.year[0] || 2500
+    //       if (movieData.attrs) {
+    //         movie.movieTypes = movieData.attrs.movie_type || []
+    //         movie.year = movieData.attrs.year[0] || 2500
     
-            for (let i = 0; i < movie.movieTypes.length; i++) {
-              let item = movie.movieTypes[i]
-              let cat = await Category.findOne({
-                name: item
-              })
+    //         for (let i = 0; i < movie.movieTypes.length; i++) {
+    //           let item = movie.movieTypes[i]
+    //           let cat = await Category.findOne({
+    //             name: item
+    //           })
     
-              if (!cat) {
-                cat = new Category({
-                  name: item,
-                  movies: [movie._id]
-                })
-              } else {
-                if (cat.movies.indexOf(movie._id) === -1) {
-                  cat.movies.push(movie._id)
-                }
-              }
+    //           if (!cat) {
+    //             cat = new Category({
+    //               name: item,
+    //               movies: [movie._id]
+    //             })
+    //           } else {
+    //             if (cat.movies.indexOf(movie._id) === -1) {
+    //               cat.movies.push(movie._id)
+    //             }
+    //           }
     
-              await cat.save()
+    //           await cat.save()
     
-              if (!movie.category) {
-                movie.category.push(cat._id)
-              } else {
-                if (movie.category.indexOf(cat._id) === -1) {
-                  movie.category.push(cat._id)
-                }
-              }
-            }
+    //           if (!movie.category) {
+    //             movie.category.push(cat._id)
+    //           } else {
+    //             if (movie.category.indexOf(cat._id) === -1) {
+    //               movie.category.push(cat._id)
+    //             }
+    //           }
+    //         }
     
-            let dates = movieData.attrs.pubdate || []
-            let pubdates = []
-            dates.map(item => {
-              if (item && item.split('(').length > 0) {
-                let parts = item.split('(')
-                let date = parts[0]
-                let country = '未知'
+    //         let dates = movieData.attrs.pubdate || []
+    //         let pubdates = []
+    //         dates.map(item => {
+    //           if (item && item.split('(').length > 0) {
+    //             let parts = item.split('(')
+    //             let date = parts[0]
+    //             let country = '未知'
     
-                if (parts[1]) {
-                  country = parts[1].split(')')[0]            
-                }
+    //             if (parts[1]) {
+    //               country = parts[1].split(')')[0]            
+    //             }
     
-                pubdates.push({
-                  date: new Date(date),
-                  country
-                })
+    //             pubdates.push({
+    //               date: new Date(date),
+    //               country
+    //             })
     
-              }
-              movie.pubdate = pubdates
-            })
+    //           }
+    //           movie.pubdate = pubdates
+    //         })
     
-            tags.forEach(tag => {
-              movie.tags.push(tag.name)
-            })
+    //         tags.forEach(tag => {
+    //           movie.tags.push(tag.name)
+    //         })
     
-            await movie.save()
-          }
-        }
-      }
+    //         await movie.save()
+    //       }
+    //     }
+    //   }
 
 
 
