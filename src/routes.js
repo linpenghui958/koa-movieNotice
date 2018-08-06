@@ -7,6 +7,16 @@ export default [
     component: AC(() => import('./views/home'))
   },
   {
+    name: '首页',
+    path: '/list/:type',
+    component: AC(() => import('./views/home'))
+  },
+  {
+    name: '首页',
+    path: '/year/:year',
+    component: AC(() => import('./views/home'))
+  },
+  {
     name: '详情页',
     path: '/detail/:id',
     component: AC(() => import('./views/movie/detail'))
