@@ -81,127 +81,127 @@ async function fetchMovieData (item) {
 
   const page = await browser.newPage()
 
-  //爬取预告列表
-  // await page.goto(movieListUrl, {
-  //   waitUntil: 'networkidle2'
-  // })
+  // 爬取预告列表
+  await page.goto(movieListUrl, {
+    waitUntil: 'networkidle2'
+  })
 
-  // await page.waitForSelector('.more')
+  await page.waitForSelector('.more')
 
-  // for(let i = 0; i < 2; i++) {
-  //   await sleep(3000)
-  //   await page.click('.more')
-  // }
+  for(let i = 0; i < 2; i++) {
+    await sleep(3000)
+    await page.click('.more')
+  }
 
-  // // 爬取页面数据
-  // const result = await page.evaluate(() => {
-  //   var $ = window.$
-  //   var items = $('.list-wp a')
-  //   var links = []
+  // 爬取页面数据
+  const result = await page.evaluate(() => {
+    var $ = window.$
+    var items = $('.list-wp a')
+    var links = []
 
-  //   if (items.length >= 1) {
-  //     items.each((index, item) => {
-  //       let it = $(item)
-  //       let doubanId = it.find('div').data('id')
-  //       let title = it.find('.title').text()
-  //       let rate = it.find('.rate').text()
-  //       let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
+    if (items.length >= 1) {
+      items.each((index, item) => {
+        let it = $(item)
+        let doubanId = it.find('div').data('id')
+        let title = it.find('.title').text()
+        let rate = it.find('.rate').text()
+        let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
 
-  //       links.push({
-  //         doubanId,
-  //         rate,
-  //         title,
-  //         poster
-  //       })
-  //     })
-  //   }
-  //   return links
-  // })
+        links.push({
+          doubanId,
+          rate,
+          title,
+          poster
+        })
+      })
+    }
+    return links
+  })
 
-  // console.log(`爬取到的movieList长度为${result.length}`)
+  console.log(`爬取到的movieList长度为${result.length}`)
 
-  // // 数据库不存在，则新建并保存
-  // await result.forEach(async item => {
-  //   let movie = await Movie.findOne({
-  //     doubanId: item.doubanId
-  //   })
-  //   if (!movie) {
-  //     let movieItem = new Movie(item)
-  //     await movieItem.save()
-  //   }
-  // })
+  // 数据库不存在，则新建并保存
+  await result.forEach(async item => {
+    let movie = await Movie.findOne({
+      doubanId: item.doubanId
+    })
+    if (!movie) {
+      let movieItem = new Movie(item)
+      await movieItem.save()
+    }
+  })
 
-  //从数据库中获取movieList
-  // let movieDataList = await Movie.find({
-  //   $or: [
-  //     { video: { $exists: false} }
-  //   ]
-  // }).sort({meta: -1}).limit(100)
+  // 从数据库中获取movieList
+  let movieDataList = await Movie.find({
+    $or: [
+      { video: { $exists: false} }
+    ]
+  }).sort({meta: -1}).limit(100)
 
-  // console.log(`需要爬取video的数据长度为${movieDataList.length}`)
+  console.log(`需要爬取video的数据长度为${movieDataList.length}`)
 
-  // let fetchMovieDataList = []
+  let fetchMovieDataList = []
 
-  // for ( let i = 0; i < movieDataList.length; i++) {
-  //   let movie = movieDataList[i]
-  //   const doubanId = movie.doubanId
-  //   console.log(`Start trailer NO.${i} doubanId${doubanId}-${movie.title} video source`)
+  for ( let i = 0; i < movieDataList.length; i++) {
+    let movie = movieDataList[i]
+    const doubanId = movie.doubanId
+    console.log(`Start trailer NO.${i} doubanId${doubanId}-${movie.title} video source`)
 
-  //   await page.goto(videoBaseUrl + doubanId, {
-  //     waitUntil: 'networkidle2'
-  //   })
+    await page.goto(videoBaseUrl + doubanId, {
+      waitUntil: 'networkidle2'
+    })
 
-  //   await sleep(1000)
+    await sleep(1000)
 
-  //   const result = await page.evaluate(() => {
-  //     const $ = window.$
-  //     const $video = $('.related-pic-video')
-  //     if ($video && $video.length > 0) {
-  //       var link = $video.attr('href')
-  //       var coverImg = $video.css('background-image').match(/(?<=").*(?=")/)[0]
-  //     }
-  //     return {link, coverImg}
-  //   })
-  //   let video
-  //   if (result.link) {
-  //     await page.goto(result.link, {
-  //       waitUntil: 'networkidle2'
-  //     })
-  //     video = await page.evaluate(() => {
-  //       const $ = window.$
-  //       const $source = $('source')
-  //       if ($source && $source.length > 0) {
-  //         return $source.attr('src')
-  //       }
-  //     })
-  //   }
-  //   if (video) {
-  //     movie.video = video
-  //     movie.link = result.link
-  //     movie.image = result.coverImg
-  //     console.log(`保存${movie.title}数据`)
-  //     await movie.save()
-  //   }
+    const result = await page.evaluate(() => {
+      const $ = window.$
+      const $video = $('.related-pic-video')
+      if ($video && $video.length > 0) {
+        var link = $video.attr('href')
+        var coverImg = $video.css('background-image').match(/(?<=").*(?=")/)[0]
+      }
+      return {link, coverImg}
+    })
+    let video
+    if (result.link) {
+      await page.goto(result.link, {
+        waitUntil: 'networkidle2'
+      })
+      video = await page.evaluate(() => {
+        const $ = window.$
+        const $source = $('source')
+        if ($source && $source.length > 0) {
+          return $source.attr('src')
+        }
+      })
+    }
+    if (video) {
+      movie.video = video
+      movie.link = result.link
+      movie.image = result.coverImg
+      console.log(`保存${movie.title}数据`)
+      await movie.save()
+    }
 
-  //   // 上传对应数据至qiniu
-  //   console.log(`fetch upload NO. ${i} movie resource`)
-  //   try {
-  //     console.log('start upload doubanId' + movie.doubanId + 'resource')
-  //     let videoData = await fetchAndUploadToQiniu(movie.video, nanoid() + '.mp4')
-  //     let coverData = await fetchAndUploadToQiniu(movie.image, nanoid() + '.png')
-  //     let posterData = await fetchAndUploadToQiniu(movie.poster, nanoid() + '.png')
+    // 上传对应数据至qiniu
+    console.log(`fetch upload NO. ${i} movie resource`)
+    try {
+      console.log('start upload doubanId' + movie.doubanId + 'resource')
+      let videoData = await fetchAndUploadToQiniu(movie.video, nanoid() + '.mp4')
+      let coverData = await fetchAndUploadToQiniu(movie.image, nanoid() + '.png')
+      let posterData = await fetchAndUploadToQiniu(movie.poster, nanoid() + '.png')
     
-  //     if (videoData.key)
-  //     videoData.key && (movie.videoKey = videoData.key)
-  //     coverData.key && (movie.coverKey = coverData.key)
-  //     posterData.key && (movie.posterKey = posterData.key)
+      if (videoData.key)
+      videoData.key && (movie.videoKey = videoData.key)
+      coverData.key && (movie.coverKey = coverData.key)
+      posterData.key && (movie.posterKey = posterData.key)
 
-  //     console.log(`上传七牛并保存${movie.doubanid}-${movie.title}   resource`)
-  //     await movie.save()
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
+      console.log(`上传七牛并保存${movie.doubanid}-${movie.title}   resource`)
+      await movie.save()
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
 
 

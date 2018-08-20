@@ -6,7 +6,7 @@ import {
   request
 } from '../../lib'
 
-import Content from './content'
+import Content from './content2'
 import {
   Menu
 } from 'antd'
