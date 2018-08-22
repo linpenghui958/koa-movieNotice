@@ -401,3 +401,5 @@ $ npm install # Or yarn install*[see note below]
 # serve with hot reload at localhost:2333
 $ npm start
 
+# build for production
+$ npm run build
