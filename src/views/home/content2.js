@@ -10,6 +10,8 @@ import {
   Icon
 } from 'antd'
 import { Link } from 'react-router-dom'
+
+import Movie from './component/Movie'
 import 'moment/locale/zh-cn'
 
 const site = 'http://pbsrrj6nm.bkt.clouddn.com/'
@@ -77,11 +79,20 @@ export default class Content extends Component {
     const { movies } = this.props
 
     const moviesList = movies.map((movie,i)=> (
-      <Movie key={i} infos={movie}/>
+      <Movie key={i} infos={movie} showModal={this._showModal.bind(this)}/>
     ))
     return (
       <div className='movies__container'>
         {moviesList}
+        <Modal
+          className='videoModal'
+          footer={null}
+          visible={this.state.visible}
+          afterClose={this._handleClose}
+          onCancel={this._handleCancel}
+        >
+          <Spin size='large' />
+        </Modal>
       </div>
     )
   }
@@ -96,57 +107,28 @@ export default class Content extends Component {
 }
 
 
-const Rating = ({rating}) => {
-  let stars = [];
-  for (let i = 1; i < 11; i++) {
-    let klass = "fa fa-star";
-    if (rating >= i && rating !== null) {
-      klass = "fa fa-star checked";
-    }
-    stars.push(
-      <i
-        style={{ direction: (i%2===0) ? "rtl" : "ltr"}}
-        className={klass}
-        />
-    );
-  }
-  return (
-    <div className="movie__rating">
-      {stars}
-    </div>
-  );
-}
 
-const Movie = ({infos}) => {
-
-  return(
-    <div className='movie' style={{backgroundImage: `url(${infos.poster})`}}>
+// const Movie = ({infos}) => {
+//   const ratingNum = 4
+//   return(
+//     <div className='movie' style={{backgroundImage: `url(${infos.poster})`}}>
       
-      <h2 className='movie__title'>{infos.title}</h2>
+//       <h2 className='movie__title'>{infos.title}</h2>
       
-      <span className='movie__description'>{infos.summary.substring(0,80) + '...'}</span>
+//       <span className='movie__description'>{infos.summary.substring(0,80) + '...'}</span>
       
-      <div className='movie__infos'>
-        <MovieInfo name='duration' value={infos.duration} />
-        <MovieInfo name='director' value={infos.director} />
-        <MovieInfo name='year' value={infos.year} />
-        <MovieInfo name='type' value={infos.movieTypes[0]} />
-      </div>
+//       <div className='movie__infos'>
+//         <MovieInfo name='duration' value={infos.duration} />
+//         <MovieInfo name='director' value={infos.director} />
+//         <MovieInfo name='year' value={infos.year} />
+//         <MovieInfo name='type' value={infos.movieTypes[0]} />
+//       </div>
       
-      <div className='movie__imdb'>
-        <Rating rating={Math.round(4)}/>
-        <a  className='movie__imdb-button' target='blank'> Detail </a>
-      </div>
+//       <div className='movie__imdb'>
+//         <Rating rating={ratingNum}/>
+//         <a  className='movie__imdb-button' target='blank'> Detail </a>
+//       </div>
       
-    </div>
-  )
-} 
-
-const MovieInfo = ({name,value}) => (
-  <div className={`movie__${name}`}>
-    <span className='info__head'>
-      {name.replace(/\b\w/g, l => l.toUpperCase())}
-    </span>
-    {value}
-  </div>
-)
+//     </div>
+//   )
+// } 
