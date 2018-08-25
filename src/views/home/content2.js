@@ -20,6 +20,11 @@ const Meta = Card.Meta
 moment.locale('zh-cn')
 
 export default class Content extends Component {
+
+  constructor(props) {
+    super(props)
+    this._showModal = this._showModal.bind(this)
+  }
   state = { visible: false }
 
   _handleClose = (e) => {
@@ -79,7 +84,7 @@ export default class Content extends Component {
     const { movies } = this.props
 
     const moviesList = movies.map((movie,i)=> (
-      <Movie key={i} infos={movie} showModal={this._showModal.bind(this)}/>
+      <Movie key={i} infos={movie} onClick={this._showModal}/>
     ))
     return (
       <div className='movies__container'>

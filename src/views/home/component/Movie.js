@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 
-import MovieInfo from './component/MovieInfo'
+import MovieInfo from './MovieInfo'
 
 export default class Movie extends Component{
   constructor(props) {
     super(props)
+    this.clickFun = this.clickFun.bind(this)
   }
   clickFun () {
     console.log('click')
@@ -28,8 +29,8 @@ export default class Movie extends Component{
         </div>
         
         <div className='movie__imdb'>
-          <Rating rating={ratingNum}/>
-          <span onClick={this.clickFun.bind(this)}  className='movie__imdb-button'> Detail </span>
+          <Rating rating={4}/>
+          <span onClick={this.clickFun}  className='movie__imdb-button'> Detail </span>
         </div>
         
       </div>
