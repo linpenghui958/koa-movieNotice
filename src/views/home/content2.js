@@ -84,7 +84,7 @@ export default class Content extends Component {
     const { movies } = this.props
 
     const moviesList = movies.map((movie,i)=> (
-      <Movie key={i} infos={movie} onClick={this._showModal}/>
+      <Movie key={i} infos={movie} showModal={this._showModal}/>
     ))
     return (
       <div className='movies__container'>

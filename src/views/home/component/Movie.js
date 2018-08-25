@@ -11,10 +11,9 @@ export default class Movie extends Component{
     console.log('click')
   }
 
-  _renderMovieInfo = () => {
+  render () {
     const {infos} = this.props
-
-    return(
+    return (
       <div className='movie' style={{backgroundImage: `url(${infos.poster})`}}>
         
         <h2 className='movie__title'>{infos.title}</h2>
@@ -30,17 +29,9 @@ export default class Movie extends Component{
         
         <div className='movie__imdb'>
           <Rating rating={4}/>
-          <span onClick={this.clickFun}  className='movie__imdb-button'> Detail </span>
+          <span onClick={this.props.showModal}  className='movie__imdb-button'> Detail </span>
         </div>
         
-      </div>
-    )
-  }
-
-  render () {
-    return (
-      <div>
-        {this._renderMovieInfo()}
       </div>
     )
   }
