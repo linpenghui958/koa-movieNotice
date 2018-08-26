@@ -194,7 +194,7 @@ const sleep = time => new Promise((resolve, reject) => {
 })
 
 async function fetchMovieData (item) {
-				const res = await requet(baseUrl + item.doubanId)
+	const res = await requet(baseUrl + item.doubanId)
 	let body
 
 	try {
@@ -203,7 +203,7 @@ async function fetchMovieData (item) {
 		console.log(e)
 	}
 		return body
-	}
+}
 
 ;(async () => {
 	let movies = await Movie.find({
@@ -214,87 +214,87 @@ async function fetchMovieData (item) {
 			{ title: '' },
 			{ summary: '' }
 		]
-})
+	})
 
-console.log(movies.length)
+	console.log(movies.length)
 
-for (let i = 0; i < 70; i++) {
-// for (let i = 0; i < 1; i++) {
-	await sleep(1000)
-	let movie = movies[i]
-	let movieData = await fetchMovieData(movie)
+	for (let i = 0; i < 70; i++) {
+	// for (let i = 0; i < 1; i++) {
+		await sleep(1000)
+		let movie = movies[i]
+		let movieData = await fetchMovieData(movie)
 
-	if (movieData) {
-		let tags = movieData.tags || []
+		if (movieData) {
+			let tags = movieData.tags || []
 
-		movie.tags = movie.tags || []
-		movie.summary = movieData.summary || ''
-		movie.title = movieData.alt_title || movieData.title || ''
-		movie.rawTitle = movieData.title || ''
+			movie.tags = movie.tags || []
+			movie.summary = movieData.summary || ''
+			movie.title = movieData.alt_title || movieData.title || ''
+			movie.rawTitle = movieData.title || ''
 
-		if (movieData.attrs) {
-			movie.movieTypes = movieData.attrs.movie_type || []
-			movie.year = movieData.attrs.year[0] || 2500
+			if (movieData.attrs) {
+				movie.movieTypes = movieData.attrs.movie_type || []
+				movie.year = movieData.attrs.year[0] || 2500
 
-			for (let i = 0; i < movie.movieTypes.length; i++) {
-				let item = movie.movieTypes[i]
-				let cat = await Category.findOne({
-					name: item
+				for (let i = 0; i < movie.movieTypes.length; i++) {
+					let item = movie.movieTypes[i]
+					let cat = await Category.findOne({
+						name: item
+					})
+
+					if (!cat) {
+						cat = new Category({
+							name: item,
+							movies: [movie._id]
+						})
+					} else {
+						if (cat.movies.indexOf(movie._id) === -1) {
+							cat.movies.push(movie._id)
+						}
+					}
+
+					await cat.save()
+
+					if (!movie.category) {
+						movie.category.push(cat._id)
+					} else {
+						if (movie.category.indexOf(cat._id) === -1) {
+							movie.category.push(cat._id)
+						}
+					}
+				}
+
+				let dates = movieData.attrs.pubdate || []
+				let pubdates = []
+				dates.map(item => {
+					if (item && item.split('(').length > 0) {
+						let parts = item.split('(')
+						let date = parts[0]
+						let country = '未知'
+
+						if (parts[1]) {
+							country = parts[1].split(')')[0]            
+						}
+
+						pubdates.push({
+							date: new Date(date),
+							country
+						})
+
+					}
+					movie.pubdate = pubdates
 				})
 
-				if (!cat) {
-					cat = new Category({
-						name: item,
-						movies: [movie._id]
-					})
-				} else {
-					if (cat.movies.indexOf(movie._id) === -1) {
-						cat.movies.push(movie._id)
-					}
-				}
+				tags.forEach(tag => {
+					movie.tags.push(tag.name)
+				})
 
-				await cat.save()
-
-				if (!movie.category) {
-					movie.category.push(cat._id)
-				} else {
-					if (movie.category.indexOf(cat._id) === -1) {
-						movie.category.push(cat._id)
-					}
-				}
+				await movie.save()
 			}
-
-			let dates = movieData.attrs.pubdate || []
-			let pubdates = []
-			dates.map(item => {
-				if (item && item.split('(').length > 0) {
-					let parts = item.split('(')
-					let date = parts[0]
-					let country = '未知'
-
-					if (parts[1]) {
-						country = parts[1].split(')')[0]            
-					}
-
-					pubdates.push({
-						date: new Date(date),
-						country
-					})
-
-				}
-				movie.pubdate = pubdates
-			})
-
-			tags.forEach(tag => {
-				movie.tags.push(tag.name)
-			})
-
-			await movie.save()
 		}
 	}
-}
 
-console.log('爬取api结束')
+	console.log('爬取api结束')
 
 })()
 ```
@@ -362,35 +362,35 @@ const fetchAndUploadToQiniu = async (url, key) => {
 		]
 	})
 
-console.log('需要爬取的movieList长度为' + movieData.length)
+	console.log('需要爬取的movieList长度为' + movieData.length)
 
-for (let i = 0; i < movieData.length; i++) {
-	let item = movieData[i]
-	console.log(`fetch upload NO. ${i} movie resource`)
-	await sleep(3000)
-	// 如果没有key数据，则fetch并且upload
-	if (item.video && !item.key) {
-		try {
-			console.log('start upload doubanId' + item.doubanId + 'resource')
-			let videoData = await fetchAndUploadToQiniu(item.video, nanoid() + '.mp4')
-			let coverData = await fetchAndUploadToQiniu(item.image, nanoid() + '.png')
-			let posterData = await fetchAndUploadToQiniu(item.poster, nanoid() + '.png')
-		
-			if (videoData.key)
-			videoData.key && (item.videoKey = videoData.key)
-			coverData.key && (item.coverKey = coverData.key)
-			posterData.key && (item.posterKey = posterData.key)
+	for (let i = 0; i < movieData.length; i++) {
+		let item = movieData[i]
+		console.log(`fetch upload NO. ${i} movie resource`)
+		await sleep(3000)
+		// 如果没有key数据，则fetch并且upload
+		if (item.video && !item.key) {
+			try {
+				console.log('start upload doubanId' + item.doubanId + 'resource')
+				let videoData = await fetchAndUploadToQiniu(item.video, nanoid() + '.mp4')
+				let coverData = await fetchAndUploadToQiniu(item.image, nanoid() + '.png')
+				let posterData = await fetchAndUploadToQiniu(item.poster, nanoid() + '.png')
+			
+				if (videoData.key)
+				videoData.key && (item.videoKey = videoData.key)
+				coverData.key && (item.coverKey = coverData.key)
+				posterData.key && (item.posterKey = posterData.key)
 
-			console.log(item)
-			await item.save()
-		} catch (e) {
-			console.log(e)
+				console.log(item)
+				await item.save()
+			} catch (e) {
+				console.log(e)
+			}
+			
 		}
-		
 	}
-}
 
-console.log('fetch upload end')
+	console.log('fetch upload end')
 
 
 })()
